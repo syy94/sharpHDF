@@ -71,7 +71,7 @@ namespace sharpHDF.Library.Objects
         public void Close()
         {
             H5F.close(Id.Value);
-            Id = 0.ToId();
+            Id = 0L.ToId();
         }
 
         /// <summary>

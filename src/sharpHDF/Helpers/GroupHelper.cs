@@ -31,7 +31,7 @@ namespace sharpHDF.Library.Helpers
                 IntPtr op_data = (IntPtr) hnd;
 
                 H5L.iterate(_parentObject.Id.Value, H5.index_t.NAME, H5.iter_order_t.NATIVE, ref pos,
-                    delegate(int _objectId, IntPtr _namePtr, ref H5L.info_t _info, IntPtr _data)
+                    delegate(long _objectId, IntPtr _namePtr, ref H5L.info_t _info, IntPtr _data)
                     {
                         string objectName = Marshal.PtrToStringAnsi(_namePtr);
 
@@ -52,19 +52,15 @@ namespace sharpHDF.Library.Helpers
                     {
                         if (hdf5Obj is Hdf5Dataset)
                         {
-                            var parent = _parentObject as IHasDatasets;
 
-                            if (parent != null)
-                            {
+                            if (_parentObject is IHasDatasets parent) {
                                 parent.Datasets.Add(hdf5Obj as Hdf5Dataset);
                             }
                         }
                         else if (hdf5Obj is Hdf5Group)
                         {
-                            var parent = _parentObject as IHasGroups;
 
-                            if (parent != null)
-                            {
+                            if (_parentObject is IHasGroups parent) {
                                 parent.Groups.Add(hdf5Obj as Hdf5Group);
                             }
                         }
@@ -95,8 +91,9 @@ namespace sharpHDF.Library.Helpers
 
                     if (gInfo.type == H5O.type_t.GROUP)
                     {
-                        Hdf5Group group = new Hdf5Group(_fileId, id, fullPath);
-                        group.FileId = _fileId;
+                        Hdf5Group group = new Hdf5Group(_fileId, id, fullPath) {
+                            FileId = _fileId
+                        };
                         group.LoadChildObjects();
                         output = group;
                     }
@@ -127,7 +124,7 @@ namespace sharpHDF.Library.Helpers
         {
             Hdf5Path path = _parentPath.Append(_name);
 
-            int id = H5G.create(_fileId.Value, path.FullPath);
+            long id = H5G.create(_fileId.Value, path.FullPath);
 
             if (id > 0)
             {
