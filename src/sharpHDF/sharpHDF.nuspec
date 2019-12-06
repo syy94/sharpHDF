@@ -10,7 +10,7 @@
     <description>Object Oriented HDF5 Wrapper</description>
     <copyright>Copyright 2016</copyright>
     <dependencies>
-      <dependency id="HDF.PInvoke" />
+      <dependency id="HDF.PInvoke.NETStandard" />
     </dependencies>
   </metadata>
 </package>
